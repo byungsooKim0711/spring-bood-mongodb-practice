@@ -1,0 +1,18 @@
+
+spring:
+  application:
+    name: MongoDB-Example
+
+  data:
+    mongodb:
+      uri: mongodb://119.207.76.90:27017/?connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=10&maxIdleTimeMS=900000
+      database: kimbs
+
+#      org.springframework.data.mapping.model.CamelCaseAbbreviatingFieldNamingStrategy;
+#      org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy;
+#      org.springframework.data.mapping.model.CamelCaseSplittingFieldNamingStrategy;
+      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
