@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -225,6 +226,65 @@ public class MongodbTemplateTests {
         List<ImcMember> moveImcMember = mongoTemplate.findAllAndRemove(query, ImcMember.class);
 
         mongoTemplate.insert(moveImcMember, "ImcMemberLog");
+    }
+
+    @Test
+    void test2() {
+        ImcMember imcMember1 = new ImcMember();
+        imcMember1.setUsername("kim");
+        imcMember1.setScore(100);
+        imcMember1.setEmail("kim@kim.kim");
+        imcMember1.setTimestamp(LocalDateTime.now());
+        imcMember1.setAppUserId("kim");
+
+        ImcMember imcMember2 = new ImcMember();
+        imcMember2.setUsername("lee");
+        imcMember2.setScore(100);
+        imcMember2.setEmail("lee@lee.lee");
+        imcMember2.setTimestamp(LocalDateTime.now());
+        imcMember2.setAppUserId("lee");
+
+        ImcMember imcMember3 = new ImcMember();
+        imcMember3.setUsername("park");
+        imcMember3.setScore(100);
+        imcMember3.setEmail("park@park.park");
+        imcMember3.setTimestamp(LocalDateTime.now());
+        imcMember3.setAppUserId("park");
+
+        mongoTemplate.insert(imcMember1);
+        mongoTemplate.insert(imcMember2);
+        mongoTemplate.insert(imcMember3);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("score").is(100));
+
+        Update update = new Update();
+        update.set("appUserId", "update");
+
+        UpdateResult updateResult = mongoTemplate.updateMulti(query, update, ImcMember.class);
+    }
+
+    @Test
+    void test3() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("username").is("lee"));
+        List<ImcMember> members = mongoTemplate.find(query, ImcMember.class);
+        System.out.println(members);
+
+        Update update = new Update();
+        mongoTemplate.updateMulti(new Query().addCriteria(Criteria.where("_id").in(members.stream().map(m -> m.getId()).collect(Collectors.toSet()))), update.set("appUserId", "leeleelee"), ImcMember.class);
+
+        query = new Query();
+        query.addCriteria(Criteria.where("username").is("kim"));
+        members = mongoTemplate.find(query, ImcMember.class);
+        System.out.println(members);
+        mongoTemplate.updateMulti(new Query().addCriteria(Criteria.where("_id").in(members.stream().map(m -> m.getId()).collect(Collectors.toSet()))), update.set("appUserId", "kimkimkim"), ImcMember.class);
+
+        query = new Query();
+        query.addCriteria(Criteria.where("username").is("park"));
+        members = mongoTemplate.find(query, ImcMember.class);
+        System.out.println(members);
+        mongoTemplate.updateMulti(new Query().addCriteria(Criteria.where("_id").in(members.stream().map(m -> m.getId()).collect(Collectors.toSet()))), update.set("appUserId", "parkparkpark"), ImcMember.class);
     }
 
     @BeforeEach
