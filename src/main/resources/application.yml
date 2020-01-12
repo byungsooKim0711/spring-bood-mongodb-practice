@@ -5,7 +5,7 @@ spring:
 
   data:
     mongodb:
-#      uri: mongodb://119.207.76.90:27017/?connectTimeoutMS=300000&minPoolSize=0&maxPoolSize=10&maxIdleTimeMS=900000
+#      uri: mongodb://127.0.0.1:27017/?connectTimeoutMS=30000&minPoolSize=0&maxPoolSize=10&maxIdleTimeMS=90000
       uri: mongodb://127.0.0.1:27021,127.0.0.1:27022,127.0.0.1:27023/?connectTimeoutMS=30000&minPoolSize=0&maxPoolSize=10&maxIdleTimeMS=90000
       database: kimbs
 
